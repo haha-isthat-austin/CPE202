@@ -60,7 +60,7 @@ class OrderedList:
         else:
             prev_node = self.head.prev
             # checking to see if our item is the smallest (we reach the end) or if it's bigger than any singular value
-            while prev_node is not self.head and prev_node.item > nuNode.item:
+            while prev_node != self.head and prev_node.item > nuNode.item:
                 prev_node = prev_node.prev
             # in case the item is already in the list
             if prev_node.item is nuNode.item:
@@ -77,6 +77,7 @@ class OrderedList:
             # the old current node's next now has to refer back to the new node
             prev_node.prev = nuNode
             return True
+
 
     def remove(self, item):
         '''Removes the first occurrence of an item from OrderedList. If item is removed (was in the list)
@@ -113,13 +114,12 @@ class OrderedList:
 
         tmp = self.head.next
         idx = 0
-        while tmp is not self.head and tmp.item is not item:
+        while tmp is not self.head:
+            if tmp.item == item:
+                return idx
             idx += 1
             tmp = tmp.next
-        if tmp.item != item:
-            return None
-        else:
-            return idx
+        return None
 
     def pop(self, index):
         '''Removes and returns item at index (assuming head of list is index 0).

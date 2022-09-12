@@ -10,9 +10,6 @@ class Stack:
 
     def __init__(self, capacity):
         '''Creates and empty stack with a capacity'''
-        if capacity is None:
-            capacity = 0
-        
         self.capacity = capacity
         self.items = [None]*capacity
         self.num_items = 0 
@@ -81,6 +78,7 @@ class Stack:
         '''Returns the number of elements currently in the stack, not the capacity
            MUST have O(1) performance'''
         return self.num_items
+
 '''
 listt = Stack(3)
 print(listt)
@@ -89,4 +87,9 @@ listt.push(None)
 listt.push(None)
 
 print(listt)
+'''
+'''
+test = Stack(3)
+test.push(1)
+print(test.peek())
 '''

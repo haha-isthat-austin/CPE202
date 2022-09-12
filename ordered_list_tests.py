@@ -3,134 +3,80 @@ from ordered_list import *
 
 class TestLab4(unittest.TestCase):
 
-    def test_wowow(self):
-        t_list = OrderedList() 
+    def test_basic_list(self):
+        tlist = OrderedList()
+        self.assertEqual(tlist.python_list(), [])
+        self.assertEqual(tlist.python_list_reversed(), [])
+        self.assertTrue(tlist.add(10))
+        self.assertEqual(tlist.python_list(), [10])
+        self.assertEqual(tlist.python_list_reversed(), [10])
+        tlist.add(5)
+        self.assertEqual(tlist.python_list(), [5, 10])
+        #self.assertEqual(tlist.python_list_reversed(), [10, 5])
+        tlist.add(-3)
+        self.assertEqual(tlist.python_list(), [-3, 5, 10])
+        tlist.add(100)
+        self.assertEqual(tlist.python_list(), [-3, 5, 10, 100])
+        self.assertEqual(tlist.python_list_reversed(), [100, 10, 5, -3])
+        self.assertEqual(tlist.size(), 4)
+        self.assertEqual(tlist.index(5), 1)
+        self.assertTrue(tlist.search(100))
+        self.assertTrue(tlist.search(-3))
+
+    def test_invalid_indicies(self):
+        tlist = OrderedList()
+        with self.assertRaises(IndexError):
+            tlist.pop(0)
+
+        with self.assertRaises(IndexError):
+            tlist.pop(-3)
+
+        with self.assertRaises(IndexError):
+            tlist.pop('three')
+
+    def test_basic_list_reverse(self):
+        tlist = OrderedList()
+        self.assertTrue(tlist.add(5))
+        tlist.add(3)
+        self.assertEqual(tlist.python_list_reversed(), [5, 3])
+
+    def test_string_list(self):
+        # Testing making a string list
+        tlist = OrderedList()
+        self.assertTrue(tlist.add("apple"))
+        self.assertTrue(tlist.add("banana"))
+        self.assertTrue(tlist.add('strawberry'))
+        self.assertFalse(tlist.add('apple'))
+        self.assertEqual(tlist.python_list(), ['apple', 'banana', 'strawberry'])
+        self.assertEqual(tlist.size(), 3)
+        self.assertEqual(tlist.python_list_reversed(), ['strawberry', 'banana', 'apple'])
+        self.assertTrue(tlist.remove('banana'))
+        self.assertEqual(tlist.python_list(), ['apple', 'strawberry'])
+
+    def test_invalid_comparisons(self):
+        # Ensures a list containing integers does not have an add string operation
+        t_list = OrderedList()
         self.assertTrue(t_list.is_empty())
-
-    def test_02a_add(self):
-        t_list = OrderedList()
-        self.assertTrue(t_list.add(10))
-
-    def test_02a_add_HuffmanNodes(self):
-        t_list = OrderedList()
-        self.assertTrue(t_list.add(HuffmanNode('a', 10)))
-
-    def test_03_remove(self):
-        t_list = OrderedList()
-        self.assertFalse(t_list.remove(5))
-
-    def test_03a_remove_HuffmanNodes(self):
-        t_list = OrderedList()
-        self.assertFalse(t_list.remove(5))
-
-    def test_04_index(self):
-        t_list = OrderedList()
         t_list.add(10)
-        t_list.add(20)
-        t_list.add(30)
-        t_list.add(40)
-        t_list.add(50)
-        self.assertEqual(t_list.index(10), 0)
+        self.assertFalse(t_list.is_empty())
+        with self.assertRaises(TypeError):
+           t_list.add('hello')
 
-    def test_04a_index_HuffmanNodes(self):
-        t_list = OrderedList()
-        t_list.add(HuffmanNode('a', 10))
-        t_list.add(HuffmanNode('b', 10))
-        t_list.add(HuffmanNode('e', 15))
-        t_list.add(HuffmanNode('f', 15))
-        t_list.add(HuffmanNode('c', 30))
-        self.assertEqual(t_list.index(HuffmanNode('a', 10)), 0)
+    def test_simple_less_than_add(self):
+        tlist = OrderedList()
+        self.assertTrue(tlist.add(5))
 
-    def test_05_pop(self):
-        t_list = OrderedList()
-        t_list.add(10)
-        t_list.add(20)
-        t_list.add(30)
-        t_list.add(40)
-        t_list.add(50)
-        self.assertRaises(IndexError, t_list.pop, -1)
-        self.assertEqual(t_list.size(), 5)
-        self.assertRaises(IndexError, t_list.pop, 5)
-        self.assertEqual(t_list.size(), 5)
-        self.assertEqual(t_list.pop(0), 10)
-        self.assertEqual(t_list.python_list(), [20, 30, 40, 50])
-        self.assertEqual(t_list.python_list_reversed(), [50, 40, 30, 20])
-        self.assertEqual(t_list.size(), 4)
-        self.assertEqual(t_list.pop(3), 50)
-        self.assertEqual(t_list.python_list(), [20, 30, 40])
-        self.assertEqual(t_list.size(), 3)
-        self.assertEqual(t_list.pop(1), 30)
-        self.assertEqual(t_list.python_list(), [20, 40])
-        self.assertEqual(t_list.size(), 2)
-        self.assertEqual(t_list.pop(0), 20)
-        self.assertEqual(t_list.python_list(), [40])
-        self.assertEqual(t_list.size(), 1)
-        self.assertEqual(t_list.pop(0), 40)
-        self.assertEqual(t_list.python_list(), [])
-        self.assertEqual(t_list.size(), 0)
-        self.assertTrue(t_list.is_empty())
+        # Test adding to list item already exists
+        self.assertFalse(tlist.add(5))
 
-    def test_06_search(self):
-        t_list = OrderedList()
-        self.assertFalse(t_list.search(10))
+        self.assertTrue(tlist.add(3))
 
-    def test_07_python_list(self):
-        t_list = OrderedList()
-        self.assertEqual(t_list.python_list(),[])
+        # Test adding to list item already exists
+        self.assertFalse(tlist.add(3))
 
-    def test_08_size_is_empty(self):
-        t_list = OrderedList()
-        self.assertEqual(t_list.size(),0)
+        self.assertTrue(tlist.add(10))
+        self.assertEqual(tlist.pop(2), 10)
 
-    def test_09_add_remove_all_add(self):
-        t_list = OrderedList()
-        for val in range(200):
-            t_list.add(val)
-        for val in range(200):
-            self.assertTrue(t_list.remove(val))
-        self.assertTrue(t_list.is_empty())
-
-    def test_10_add_pop_all_add(self):
-        t_list = OrderedList()
-        for val in range(200):
-            t_list.add(val)
-        for val in range(199, -1, -1):
-            self.assertEqual(t_list.pop(val), val)
-        self.assertTrue(t_list.is_empty())
-
-    def test_11_add_pop_remove(self):
-        t_list = OrderedList()
-        for val in range(200):
-            t_list.add(val)
-        for val in range(100):
-            self.assertEqual(t_list.pop(0), val)
-            self.assertTrue(t_list.remove(199-val))
-        print(t_list)
-        self.assertTrue(t_list.is_empty())
-'''
-    def test_14_python_list_reversed_is_recursive01(self):
-        t_list = OrderedList()
-        for val in range(200):
-            t_list.add(val)
-        sys.setrecursionlimit(150) 
-        #with self.assertRaises(RecursionError)
-
-    def test_17_python_list_reversed_is_recursive02(self):
-        t_list = OrderedList()
-        for val in range(200):
-            t_list.add(val)
-        sys.setrecursionlimit(150)
-        with self.assertRaises(RecursionError):
-
-    def test_19_python_list_reversed_is_recursive03(self):
-        t_list = OrderedList()
-        for val in range(200):
-            t_list.add(val)
-        sys.setrecursionlimit(150)
-        with self.assertRaises(RecursionError):
-'''
-
-'''
     def test_simple(self):
         t_list = OrderedList()
         t_list.add(10)
@@ -140,10 +86,75 @@ class TestLab4(unittest.TestCase):
         self.assertTrue(t_list.search(10))
         self.assertFalse(t_list.is_empty())
         self.assertEqual(t_list.python_list_reversed(), [10])
+        self.assertEqual(t_list.size(), 1)
         self.assertTrue(t_list.remove(10))
-        t_list.add(10)
+        self.assertEqual(t_list.size(), 0)
+        self.assertTrue(t_list.add(10))
         self.assertEqual(t_list.pop(0), 10)
-'''
+
+    def test_massive_list(self):
+        tlist = OrderedList()
+        compare_list = []
+        for i in range(99, -1, -1):
+            self.assertTrue(tlist.add(i))
+        for i in range(100):
+            compare_list.append(i)
+        self.assertEqual(tlist.python_list(), compare_list)
+
+        for i in range(99, -1, -1):
+            self.assertTrue(tlist.search(i))
+            self.assertEqual(tlist.pop(i), i)
+            self.assertFalse(tlist.search(i))
+
+    def test_remove(self):
+        tlist = OrderedList()
+        tlist.add('apple')
+        tlist.add('banana')
+        tlist.add('cucumber')
+        tlist.add('dragon fruit')
+        tlist.add('eggplant')
+        self.assertEqual(tlist.python_list(), ['apple', 'banana', 'cucumber', 'dragon fruit', 'eggplant'])
+        self.assertEqual(tlist.python_list_reversed(), ['eggplant', 'dragon fruit', 'cucumber', 'banana', 'apple'])
+        self.assertTrue(tlist.remove('dragon fruit'))
+        self.assertEqual(tlist.python_list(), ['apple', 'banana', 'cucumber', 'eggplant'])
+        tlist.add('dragon fruit')
+        self.assertEqual(tlist.python_list(), ['apple', 'banana', 'cucumber', 'dragon fruit', 'eggplant'])
+        self.assertEqual(tlist.python_list_reversed(), ['eggplant', 'dragon fruit', 'cucumber', 'banana', 'apple'])
+
+    def test_remove_single_list(self):
+        tlist = OrderedList()
+        tlist.add(10)
+        self.assertEqual(tlist.size(), 1)
+        self.assertTrue(tlist.remove(10))
+        self.assertEqual(tlist.size(), 0)
+
+    def test_remove_till_empty(self):
+        tlist = OrderedList()
+        tlist.add('apple')
+        tlist.add('banana')
+        tlist.add('cucumber')
+        tlist.add('dragon fruit')
+        tlist.add('eggplant')
+        self.assertEqual(tlist.pop(3), 'dragon fruit')
+        self.assertEqual(tlist.python_list(), ['apple', 'banana', 'cucumber', 'eggplant'])
+
+        self.assertEqual(tlist.pop(2), 'cucumber')
+        self.assertEqual(tlist.python_list(), ['apple', 'banana', 'eggplant'])
+
+        self.assertTrue(tlist.remove('apple'))
+        self.assertEqual(tlist.python_list(), ['banana', 'eggplant'])
+        self.assertTrue(tlist.remove('eggplant'))
+        self.assertEqual(tlist.size(), 1)
+        self.assertTrue(tlist.search('banana'))
+        self.assertEqual(tlist.python_list_reversed(), ['banana'])
+        self.assertEqual(tlist.pop(0), 'banana')
+        self.assertTrue(tlist.is_empty())
+        self.assertEqual(tlist.size(), 0)
+        self.assertEqual(tlist.python_list(), [])
+        self.assertEqual(tlist.python_list_reversed(), [])
+
+        pass
+
 
 if __name__ == '__main__': 
     unittest.main()
